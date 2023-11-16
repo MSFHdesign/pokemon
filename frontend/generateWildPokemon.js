@@ -29,7 +29,7 @@ async function generateWildPokemon() {
                     <img class="playerpokemonPic" src="/images/${wildPokemonData.image}.png" alt="${wildPokemonData.name}">
                     <p><b>Level: ${wildPokemonData.level}</b></p>
                 </div>
-                <p>Type: ${wildPokemonData.type}</p>
+               <p>Type: ${Array.isArray(wildPokemonData.type) ? wildPokemonData.type.join(', ') : wildPokemonData.type}</p>
                 <p>Attack: ${wildPokemonData.attack}</p>
                 <p>Defence: ${wildPokemonData.defence}</p>
                 <div class="wildPokemonContainer"></div>

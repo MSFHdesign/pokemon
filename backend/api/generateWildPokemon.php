@@ -2,20 +2,19 @@
 session_start();
 require '../class/pokemon.php';
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $wildPokemon = Pokemon::encounterWildPokemon();
 
     if ($wildPokemon !== null) {
-        $_SESSION['wildPokemons'][] = $wildPokemon->getId(); // Gem Pokemon-ID i stedet for hele Pokemon-objektet
-// VI ER HER!!!!
+        $_SESSION['wildPokemons'][] = $wildPokemon;
         // Opret et array med Pokemon-ID og anden relevant information
         $wildPokemonData = [
+            'uniqueId' => $wildPokemon->uniqueId,
             'id' => $wildPokemon->id,
             'level' => $wildPokemon->getLevel(),
+            'type' => $wildPokemon->type,
             'name' => $wildPokemon->name,
             'image' => $wildPokemon->image,
-            'type' => $wildPokemon->type,
             'height' => $wildPokemon->height,
             'weight' => $wildPokemon->weight,
             'health' => $wildPokemon->health,
@@ -23,29 +22,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'speed' => $wildPokemon->speed,
             'defence' => $wildPokemon->defence,
             'attack' => $wildPokemon->attack,
-            'special' => $wildPokemon->special,   
+            'special' => $wildPokemon->special,
             'catch_rate' => $wildPokemon->getCatch_rate(),
-   
-                  
         ];
         
         // Hent angrebene og deres navne fra Pokémon-objektet
         foreach ($wildPokemon->attacks as $attack) {
             $wildPokemonData['attacks'][] = [
                 'name' => $attack->getName(),
+                'damage' => $attack->getDamage(),
                 // Tilføj eventuelle andre attributter fra Attack-objektet, f.eks. skade eller type
             ];
         }
 
+        // Vardump angrebene for at kontrollere data
         $encodedData = json_encode($wildPokemonData);
 
         if (strlen($encodedData) <= 4096) {
-          //  setcookie('wildPokemons', $encodedData, time() + 60 * 60 * 24 * 30, $cookieParams['path'], null, true, false);
             header('Content-Type: application/json');
-            echo json_encode($wildPokemonData);
+            echo $encodedData;
         } else {
             http_response_code(500);
-            echo json_encode(['error' => 'Cookie data is too large.']);
+            echo json_encode(['error' => 'Data is too large.']);
             exit();
         }
     } else {
@@ -56,4 +54,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(400);
     echo json_encode(['error' => 'Bad Request.']);
 }
-?>

@@ -1,13 +1,63 @@
 <?php
 require_once '../class/attack.php';
-
+require_once '../class/player.php';
+require_once '../class/pokemon.php';
+session_start();
 if (isset($_SESSION['player'])) {
     $player = $_SESSION['player'];
+    session_regenerate_id(true);
+    // Hent den aktive Pokemon
+   
+     $getActivePokemon = $player->getActivePokemonWithMoves();
+
+    // Tjek, om $getActivePokemon indeholder det forventede
+
+
+    // Send dataen som JSON
+    echo json_encode($getActivePokemon);
+    echo "<br/> <br/>";
 } else {
     echo "Player session not found";
 }
 
 
+if (isset($_SESSION['wildPokemons'])) {
+    echo "<br/>";
+    $wildPokemons = $_SESSION['wildPokemons'];
+
+    // Udskriv Pokemon-data og angrebene som JSON
+    foreach ($wildPokemons as $pokemon) {
+        $pokemonData = [
+            'uniqueId' => $pokemon->uniqueId,
+            'id' => $pokemon->id,
+            'level' => $pokemon->getLevel(),
+            'type' => $pokemon->type,
+            'name' => $pokemon->name,
+            'image' => $pokemon->image,
+            'height' => $pokemon->height,
+            'weight' => $pokemon->weight,
+            'health' => $pokemon->health,
+            'attacks' => $pokemon->attacks, // Her beholder vi angrebene som objekter
+            'speed' => $pokemon->speed,
+            'defence' => $pokemon->defence,
+            'attack' => $pokemon->attack,
+            'special' => $pokemon->special,
+            'catch_rate' => $pokemon->getCatch_rate(),
+        ];
+
+        // Konverter angrebene fra objekter til arrays
+        foreach ($pokemon->attacks as $attack) {
+            $pokemonData['attacks'][] = [
+                'name' => $attack->getName(),
+                'damage' => $attack->getDamage(),
+            ];
+        }
+        echo "<br/>";
+        echo json_encode($pokemonData);
+    }
+} else {
+    echo "wildPokemons session not found";
+}
 // Håndter POST-anmodningen
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Dekod JSON-data fra anmodningen

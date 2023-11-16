@@ -1,4 +1,4 @@
--- Active: 1693467841213@@mysql29.unoeuro.com@3306@siindevelopment_dk_db
+-- Active: 1696918485589@@mysql29.unoeuro.com@3306@siindevelopment_dk_db
 -- Opret Pokemon-tabel
 
 -- Drop Pokemon table if it exists
@@ -33,7 +33,7 @@ CREATE TABLE Attacks (
     accuracy INT,
     pp INT,
     effect_percent INT,
-    level_required INT
+    level_required INT,
 );
 
 
@@ -66,25 +66,16 @@ VALUES
     (24, 'Arbok', 'Poison', 60, 85, 69, 65, 80, 22, 999, 90, 'arbok', '17,18'),
     (25, 'Pikachu', 'Electric', 35, 55, 30, 50, 90, 5, 999, 190, 'pikachu', '19,20'),
     (26, 'Raichu', 'Electric', 60, 90, 55, 90, 100, 20, 999, 75, 'raichu', '19,20'),
-    (27, 'Sandshrew', 'Ground', 50, 75, 85, 30, 40, 7, 22, 255, 'sandshrew', '21,22'),
-    (28, 'Sandslash', 'Ground', 75, 100, 110, 55, 65, 22, 999, 90, 'sandslash', '21,22'),
+    (27, 'Sandshrew', 'Ground', 50, 75, 85, 30, 40, 7, 22, 255, 'sandshrew', '1,2'),
+    (28, 'Sandslash', 'Ground', 75, 100, 110, 55, 65, 22, 999, 90, 'sandslash', '2,2'),
     (29, 'Nidoran\u2640', 'Poison', 55, 47, 52, 40, 41, 7, 16, 235, 'nidoran_f', '1,8'),
-    (30, 'Nidorina', 'Poison', 70, 62, 67, 55, 56, 16, 32, 120, 'nidorina', '23,24'),
-    (31, 'Nidoqueen', 'Poison/Ground', 90, 82, 87, 75, 76, 32, 999, 45, 'nidoqueen', '23,24'),
+    (30, 'Nidorina', 'Poison', 70, 62, 67, 55, 56, 16, 32, 120, 'nidorina', '20,20'),
+    (31, 'Nidoqueen', 'Poison/Ground', 90, 82, 87, 75, 76, 32, 999, 45, 'nidoqueen', '3,2'),
     (32, 'Nidoran\u2642', 'Poison', 46, 57, 40, 40, 50, 7, 16, 235, 'nidoran_m', '1,2'),
-    (33, 'Nidorino', 'Poison', 61, 72, 57, 55, 65, 16, 32, 120, 'nidorino', '25,26'),
-    (34, 'Nidoking', 'Poison/Ground', 81, 92, 77, 75, 85, 32, 999, 45, 'nidoking', '25,26'),
+    (33, 'Nidorino', 'Poison', 61, 72, 57, 55, 65, 16, 32, 120, 'nidorino', '2,6'),
+    (34, 'Nidoking', 'Poison/Ground', 81, 92, 77, 75, 85, 32, 999, 45, 'nidoking', '5,6'),
     (151, 'Mew', 'Psychic', 100, 80, 80, 100, 100, 50, NULL, 3.5, 'mew', '1,2,3'),
     (150, 'Mewtwo', 'Psychic', 120, 90, 90, 120, 110, 60, 50, 3.2, 'mewtwo', '4,5,6');
-
-
--- Inserting data for Mew
-INSERT INTO Pokemon (id, name, type, health, attack, defense, special, speed, level, evolve_level, capture_rate, image, attack_ids)
-VALUES (151, 'Mew', 'Psychic', 100, 80, 80, 100, 100, 50, NULL, 3.5, 'mew_image.jpg', '1,2,3');
-
--- Inserting data for Mewtwo
-INSERT INTO Pokemon (id, name, type, health, attack, defense, special, speed, level, evolve_level, capture_rate, image, attack_ids)
-VALUES (150, 'Mewtwo', 'Psychic', 120, 90, 90, 120, 110, 60, 50, 3.2, 'mewtwo_image.jpg', '4,5,6');
 
 
 -- Indsæt Attacks-data

@@ -1,5 +1,5 @@
 <?php
-require_once 'Attack.php';
+require_once 'attack.php';
 require_once __DIR__ . '/../SQL/connection.php';
 class Pokemon {
     private $apiUrl = 'https://pokeapi.co/api/v2/pokemon/';
@@ -18,33 +18,22 @@ class Pokemon {
     public $attack;
     private $evolve_level;
     private $capture_rate;
-
+    private $uniqueId;
     public function __construct($pokemonId, $level = 5) {
         $this->fetchPokemonData($pokemonId);
         $this->fetchPokemonAttacks($pokemonId);
 
         $this->level = $level;
         $this->adjustStatsForLevel();
+        $this->uniqueId = uniqid("wildPokemon_");
     }
     public static function getPokemonById($id) {
         return $id;
     }
 
-    // private function fetchPokemonData($pokemonId) {
-    //     $url = $this->apiUrl . $pokemonId;
-    //     $pokemonData = json_decode(file_get_contents($url), true);
-    //     $this->name = $pokemonData['name'];
-    //     $this->type = $pokemonData['types'][0]['type']['name'];
-    //     $this->height = $pokemonData['height'];
-    //     $this->weight = $pokemonData['weight'];
-    //     $this->health = $pokemonData['stats'][0]['base_stat'];
-    //     $this->maxHealth = $pokemonData['stats'][0]['base_stat'];
-    //     $this->id = $pokemonData['id'];
-    //     $this->image = $pokemonData['sprites']['front_default'];
-    //     $this->speed = $pokemonData['stats'][5]['base_stat'];
-    //     $this-> defence = $pokemonData['stats'][2]['base_stat'];
-    //     $this->attack = $pokemonData['stats'][1]['base_stat'];
-    // }
+  public function getUniqueId() {
+        return $this->uniqueId;
+    }
 
     private function fetchPokemonData($pokemonId) {
         $sql = "SELECT * FROM Pokemon WHERE id = $pokemonId";
@@ -56,7 +45,14 @@ class Pokemon {
             // Udfyld dine egenskaber baseret på data fra databasen
             $this->id = $row['id'];
             $this->name = $row['name'];
-            $this->type = $row['type'];
+            $types = explode('/', $row['type']);
+
+            // Tjek om der er mere end én type
+            if (count($types) > 1) {
+                $this->type = $types;
+            } else {
+                $this->type = $row['type']; // Brug strengen direkte, da der kun er én type
+            }
             $this->image = $row['image'];
             $this->health = $row['health'];
             $this->attack = $row['attack'];
@@ -64,28 +60,11 @@ class Pokemon {
             $this->special = $row['special'];
             $this->speed = $row['speed'];
             $this->evolve_level = $row['evolve_level'];
-            $this->attacks = $row['attacks'];
             $this->capture_rate = $row['capture_rate'];
-
         }
     }
 
     private function fetchPokemonAttacks($pokemonId) {
-    //     $url = $this->apiUrl . $pokemonId;
-    //     $pokemonData = json_decode(file_get_contents($url), true);
-    
-    //     // Tjek om $pokemonData['moves'] er en array
-    //     if (is_array($pokemonData['moves'])) {
-    //         foreach ($pokemonData['moves'] as $move) {
-    //             if (count($this->attacks) < 4) {
-    //                 // Opret et nyt Attack objekt og tilføj det til $this->attacks
-    //                 $this->attacks[] = new Attack($move['move']['name'], 5);
-    //             } else {
-    //                 break; 
-    //             }
-    //         }
-    //     } 
-    // }
     global $conn;
     $sqlAttacks = "SELECT * FROM Pokemon WHERE id = $pokemonId";
 
@@ -113,11 +92,11 @@ class Pokemon {
                 $this->attacks[] = new Attack(
                     $attackRow['attack_name'],
                     $attackRow['damage'],
-                    $attackRow['type'],
                     $attackRow['accuracy'],
                     $attackRow['pp'],
                     $attackRow['effect_percent'],
                     $attackRow['level_required'],
+                  
                     // Du kan tilføje andre nødvendige attributter her
                 );
             }
@@ -193,7 +172,7 @@ public function __get($attribute) {
         $this->level = $level;
     }
     public static function encounterWildPokemon() {
-        $availablePokemon = [];
+  
         $cookieData = json_decode($_COOKIE['player'], true);
         $playerLocation = $cookieData['player_location'];
     
@@ -260,7 +239,7 @@ public function __get($attribute) {
         }
     
         // In case of an issue, return a default Pokémon
-        return new Pokemon(6, 100);
+        return new Pokemon(150, 100);
     }
     
 
