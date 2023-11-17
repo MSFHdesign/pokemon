@@ -1,0 +1,32 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+#game-area {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr);
+    grid-template-rows: repeat(20, 1fr);
+    width: 700px;
+    height: 700px;
+    border: 1px solid #000;
+    position: relative;
+}
+
+#player {
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    position: relative;
+}
+.obstacle {
+    background-color: brown;
+    position: relative;
+}
+
+.grass {
+
+    position: relative;
+    background-image: linear-gradient(to bottom, #8cc84b, #5e8a29);
+}
