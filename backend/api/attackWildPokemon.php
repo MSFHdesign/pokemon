@@ -8,11 +8,16 @@ if (isset($_SESSION['player'])) {
     session_regenerate_id(true);
     // Hent den aktive Pokemon
    
-     $getActivePokemon = $player->getActivePokemonWithMoves();
+     $getActivePokemon = $player;
 
     // Tjek, om $getActivePokemon indeholder det forventede
 
-
+    if ($getActivePokemon instanceof player) {
+        echo "Dette er en instans af player.";
+    } else {
+        echo "Dette er ikke en instans af Pokemon.";
+    }
+    echo "<br/>";
     // Send dataen som JSON
     echo json_encode($getActivePokemon);
     echo "<br/> <br/>";
@@ -27,6 +32,13 @@ if (isset($_SESSION['wildPokemons'])) {
 
     // Udskriv Pokemon-data og angrebene som JSON
     foreach ($wildPokemons as $pokemon) {
+        if ($pokemon instanceof Pokemon) {
+            echo "<br/>";
+            echo "Dette er en instans af Pokemon.";
+
+        } else {
+            echo "Dette er ikke en instans af Pokemon.";
+        }
         $pokemonData = [
             'uniqueId' => $pokemon->uniqueId,
             'id' => $pokemon->id,
@@ -43,6 +55,7 @@ if (isset($_SESSION['wildPokemons'])) {
             'attack' => $pokemon->attack,
             'special' => $pokemon->special,
             'catch_rate' => $pokemon->getCatch_rate(),
+            'catch_able' => $pokemon->getCatchAble(),
         ];
 
         // Konverter angrebene fra objekter til arrays
@@ -51,9 +64,14 @@ if (isset($_SESSION['wildPokemons'])) {
                 'name' => $attack->getName(),
                 'damage' => $attack->getDamage(),
             ];
+
         }
+       
+
         echo "<br/>";
+        echo "<pre>";
         echo json_encode($pokemonData);
+        echo "</pre>";
     }
 } else {
     echo "wildPokemons session not found";
@@ -90,9 +108,6 @@ $playerOutcome = $attackInstance->attackPokemon($att, $wildPokemon);
 // Returner testdata
 echo json_encode([
     'message' => 'TestData received successfully!',
-    'wildpokemonOutcome' => $wildOutcome,
-    'playerOutcome' => $playerOutcome,
-    'newPlayerHealth' => $player->getActivePokemon()[0]
 ]);
 
 

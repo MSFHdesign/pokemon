@@ -9,6 +9,7 @@ class Pokemon {
     public $type;
     public $attacks = [];
     public $health;
+    public $currentHealth;
     public $id;
     public $image;
     private $experience = 0;
@@ -19,6 +20,7 @@ class Pokemon {
     private $evolve_level;
     private $capture_rate;
     private $uniqueId;
+    private $catchAble;
     public function __construct($pokemonId, $level = 5) {
         $this->fetchPokemonData($pokemonId);
         $this->fetchPokemonAttacks($pokemonId);
@@ -26,6 +28,8 @@ class Pokemon {
         $this->level = $level;
         $this->adjustStatsForLevel();
         $this->uniqueId = uniqid("wildPokemon_");
+        $this -> catchAble = false;
+        $this->currentHealth = $this->health;
     }
     public static function getPokemonById($id) {
         return $id;
@@ -34,6 +38,8 @@ class Pokemon {
   public function getUniqueId() {
         return $this->uniqueId;
     }
+
+    
 
     private function fetchPokemonData($pokemonId) {
         $sql = "SELECT * FROM Pokemon WHERE id = $pokemonId";
@@ -149,7 +155,12 @@ public function __get($attribute) {
     public function getHealth() {
         return $this->health;
     }
-    
+    public function getCatchAble(){
+        return $this->catchAble;
+    }
+    private function setCatchAble($catchAble) {
+        $this->catchAble = $catchAble;
+    }
     
 
     
@@ -222,6 +233,7 @@ public function __get($attribute) {
         // Randomly select a value within the total probability range
         $randomValue = rand(1, $totalProbability);
     
+       
         // Iterate through Pokémon and find the one whose cumulative probability range includes the random value
         $cumulativeProbability = 0;
         foreach ($pokemonProbabilities as $pokemon) {
@@ -229,15 +241,17 @@ public function __get($attribute) {
             if ($randomValue <= $cumulativeProbability) {
                 $pokemonId = $pokemon['id'];
                 $pokemonLevel = rand($pokemon['level'][0], $pokemon['level'][1]);
-    
                 // Create and configure the wild Pokémon
                 $wildPokemon = new Pokemon($pokemonId, $pokemonLevel);
                 $wildPokemon->setLevel($pokemonLevel);
-    
+                // Set the wild Pokémon as catchable
+                $wildPokemon->setCatchAble(true); 
+                // Return the wild Pokémon
                 return $wildPokemon;
             }
+            
         }
-    
+        
         // In case of an issue, return a default Pokémon
         return new Pokemon(150, 100);
     }
@@ -283,7 +297,7 @@ public function __get($attribute) {
     }
     public function calculateCurrentHP($damage) {
         // Beregn den nuværende sundhed baseret på den modtagne skade
-        $this->health -= $damage;
+        $this->currentHealth -= $damage;
     
         // Sørg for, at sundheden ikke går under nul
         if ($this->health < 0) {

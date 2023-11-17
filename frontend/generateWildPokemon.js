@@ -1,7 +1,6 @@
 async function generateWildPokemon() {
     let listItem;
     let wildPokemonData;
-    let currentHealth;
 
     try {
         const level = 5;
@@ -18,7 +17,6 @@ async function generateWildPokemon() {
         if (response.ok) {
             wildPokemonData = await response.json();
             const pokemonName = wildPokemonData.name.replace(/\\u(\d{4})/g, (_, code) => String.fromCharCode(parseInt(code, 16)));
-            
             const wildPokemonUl = document.getElementById('wildPokemonUl');
             listItem = document.createElement('li');
             listItem.innerHTML = `
@@ -46,7 +44,7 @@ async function generateWildPokemon() {
             </div>
             `;
             wildPokemonUl.appendChild(listItem);
-            currentHealth = wildPokemonData.health;
+
         } else {
             throw new Error('Error: Could not generate a wild Pokémon.');
         }
@@ -59,12 +57,13 @@ async function generateWildPokemon() {
         runButton.addEventListener('click', async function () {    
             runAway(listItem);
         });
-
+        if (wildPokemonData.catch_able) {
+      
         const catchButton = listItem.querySelector('#catchButton');
         catchButton.addEventListener('click', async function () {    
-            catchPokemon(listItem, wildPokemonData, currentHealth);
+            catchPokemon(listItem, wildPokemonData);
         });
-
+    }else (console.log("pokemon is not catchable"));
         const attackButton = listItem.querySelector('#attackButton');
         attackButton.addEventListener('click', async function () {    
             // Assuming you have an updateHealth function to update currentHealth

@@ -35,6 +35,8 @@ class Player {
         $newPlayer->updatePlayerInfo($playerName, $selectedPokemonId);
         return $newPlayer;
     }
+
+    
 public function updatePlayerInfo($playerName, $selectedPokemonId) {
     $this->setName($playerName);
 
@@ -46,7 +48,7 @@ public function updatePlayerInfo($playerName, $selectedPokemonId) {
     $this->activePokemon = [$selectedPokemon];
 
     // Tilføj denne logningslinje
-    error_log("Active Pokemon: " . print_r($this->activePokemon, true));
+
 
     // Gem opdaterede oplysninger i cookies
     $this->saveToCookies();

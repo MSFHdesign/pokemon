@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'attack' => $wildPokemon->attack,
             'special' => $wildPokemon->special,
             'catch_rate' => $wildPokemon->getCatch_rate(),
+            'catch_able' => $wildPokemon->getCatchAble(),
         ];
         
         // Hent angrebene og deres navne fra Pokémon-objektet
