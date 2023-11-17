@@ -1,26 +1,27 @@
 <?php
 session_start();
+spl_autoload_register(function ($class) {
+    $classPath = '../backend/class/' . $class . '.php';
+    
+    if (file_exists($classPath)) {
+        include $classPath;
+    } else {
+        echo "Klassen $class blev ikke fundet.";
+    }
+});
 
-require_once '../backend/class/player.php';
-require_once '../backend/class/pokemon.php';
-require_once '../backend/class/attack.php';
-
-// Check if the user is not in the session
-if (!isset($_SESSION['user'])) {
-    header('Location: /index2.php'); // Replace with the actual path to index2.php
-    exit();
-}
+include '../backend/class/player.php';
+include '../backend/class/pokemon.php';
 
 if (isset($_SESSION['player'])) {
-    // Unserialize the player object and cast it to the Player class
+    // Cast the stored player data back to the Player class
     $player = $_SESSION['player'];
     $playerName = $_SESSION['user'];
-
-
 } else {
     // If not, set default or handle accordingly
     $player = null;
 }
+var_dump($_SESSION['user_id']);
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +34,9 @@ if (isset($_SESSION['player'])) {
 </head>
 <body>
 <?php 
-
+var_dump($_SESSION);
+echo "<br/>";
+echo "<br/>";
 if ($player instanceof Player) {
     echo "Dette er en instans af Player.";
     echo "<br/>";
@@ -59,6 +62,10 @@ if ($player instanceof Player) {
          
         </ul>
     </div>
+    <script>
+        // Log the player information to the browser console
+        console.log("Player Information:", <?php echo $player; ?>);
+    </script>
 
     <?php 
     include '../frontend/komponents/logud/logud.php';

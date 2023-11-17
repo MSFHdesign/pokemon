@@ -10,9 +10,11 @@ if (isset($_SESSION['user']) && $_SESSION['userStatus'] === "newUser") {
     // Håndter post-anmodninger
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['startGame'])) {
-        // Hvis formularen til at starte spillet er blevet sendt
+
         // Opret en ny spiller med det indtastede navn
         $player = Player::createNewPlayer($_POST['playerName'], $_POST['selectedPokemon']);
+
+        
         header('Location: /maps/startermap.php');
         if (!$player) {
             echo "Fejl ved oprettelse af spiller.";
@@ -39,11 +41,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <button type="submit" name="startGame">Start Game</button>
     </form>
+    <?php 
+    if (isset($_SESSION['player'])) {
+        // Cast the stored player data back to the Player class
+        $player = $_SESSION['player'];
+        $playerName = $_SESSION['user'];
 
+    } else {
+        // If not, set default or handle accordingly
+        $player = null;
+    }
+    ?>
+<?php 
+
+if ($player instanceof Player) {
+    echo "Dette er en instans af Player.";
+    echo "<br/>";
+    echo var_dump($player);
+} else {
+    echo "Dette er ikke en instans af Player.";
+    echo "<br/>";
+    echo var_dump($player);
+}?>
 <?php
 } else {
     // Redirect the player to another page (replace 'index.php' with the actual page)
-    header('Location: /index.php');
+    header('Location: /index2.php');
     exit();
 }
 ?>

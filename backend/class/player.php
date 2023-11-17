@@ -126,8 +126,6 @@ public function updatePlayerInfo($playerName, $selectedPokemonId) {
 
     public function addActivePokemon($pokemon) {
         $this->activePokemon[] = $pokemon;
-        // Tilføj midlertidig fejlfinding her, hvis nødvendigt
-        error_log("Added Pokemon to activePokemon: " . print_r($pokemon, true));
     }
 
     public function getActivePokemon() {

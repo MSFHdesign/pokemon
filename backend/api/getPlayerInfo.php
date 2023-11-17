@@ -11,9 +11,8 @@ session_start();
 // Hvis sessionen indeholder en spiller
 if (isset($_SESSION['player'])) {
     $player = $_SESSION['player'];
-    session_regenerate_id(true);
     // Hent den aktive Pokemon
-    $getActivePokemon = $player->getActivePokemonWithMoves();
+    $getActivePokemon = $player;
     // $getActivePokemon = $player->getActivePokemon();
 
     // Tjek, om $getActivePokemon indeholder det forventede
